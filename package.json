@@ -1,0 +1,24 @@
+{
+  "name": "@ez-budgets/test-utils",
+  "version": "1.0.0",
+  "description": "Packaging meant to help with the process of writing Jest tests",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DuncanMcPherson/test-utils.git"
+  },
+  "keywords": [
+    "jest",
+    "testing",
+    "mocking"
+  ],
+  "author": "Duncan McPherson",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/DuncanMcPherson/test-utils/issues"
+  },
+  "homepage": "https://github.com/DuncanMcPherson/test-utils#readme"
+}
