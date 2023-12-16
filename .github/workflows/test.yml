@@ -46,6 +46,7 @@ jobs:
   checks:
     runs-on: ubuntu-latest
     needs: base_branch_coverage
+    if: always()
     steps:
       - uses: actions/checkout@v3
       - name: Download base coverage
