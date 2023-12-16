@@ -5,7 +5,9 @@
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "'./dist/index.d.ts",
-  "files": ["/dist/*"],
+  "files": [
+    "/dist/*"
+  ],
   "scripts": {
     "build": "tsup",
     "test": "jest --config=./jest.config.js"
@@ -24,6 +26,12 @@
   "bugs": {
     "url": "https://github.com/DuncanMcPherson/test-utils/issues"
   },
+  "jest-junit": {
+    "outputDirectory": "./test-results",
+    "classNameTemplate": "{classname}",
+    "titleTemplate": "{title}",
+    "ancestorSeparator": ">"
+  },
   "homepage": "https://github.com/DuncanMcPherson/test-utils#readme",
   "devDependencies": {
     "@babel/core": "^7.23.5",
@@ -32,6 +40,7 @@
     "@types/jest": "^29.5.11",
     "@types/lodash": "^4.14.202",
     "jest-jasmine2": "^29.7.0",
+    "jest-junit": "^16.0.0",
     "ts-node": "^10.9.2",
     "tsup": "^8.0.1",
     "typescript": "^5.3.3"
