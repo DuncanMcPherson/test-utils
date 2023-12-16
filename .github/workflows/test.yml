@@ -23,3 +23,12 @@ jobs:
         with:
           files: |
             test-results/junit.xml
+
+      - name: Generate code coverage
+        id: code-coverage
+        uses: barecheck/code-code-coverage-action@v1
+        with:
+          barecheck-github-app-token: ${{ secrets.BARECHECK_GITHUB_APP_TOKEN }}
+          lcov-file: "./test-results/coverage/lcov.info"
+          send-summary-comment: true
+          show-annotations: "warning"
