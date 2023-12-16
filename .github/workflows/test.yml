@@ -23,7 +23,42 @@ jobs:
         with:
           files: |
             test-results/junit.xml
-
+  base_branch_coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.base_ref }}
+      - name: Cache node modules
+        id: cache-npm
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{runner.os }}-build-${{ hashFiles('**/package-lock.json') }}
+      - run: npm install
+      - run: npm run test
+      - name: Upload code coverage for master
+        uses: actions/upload-artifact@v3
+        with:
+          name: ref-lcov.info
+          path: ./test-results/coverage/lcov.info
+  checks:
+    runs-on: ubuntu-latest
+    needs: base_branch_coverage
+    steps:
+      - uses: actions/checkout@v3
+      - name: Download base coverage
+        uses: actions/download-artifact@v3
+        with:
+          name: ref-lcov.info
+      - name: Cache node modules
+        id: cache-npm
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{runner.os }}-build-${{ hashFiles('**/package-lock.json') }}
+      - run: npm install
+      - run: npm run test
       - name: Generate code coverage
         if: always()
         id: code-coverage
@@ -31,5 +66,6 @@ jobs:
         with:
           barecheck-github-app-token: ${{ secrets.BARECHECK_GITHUB_APP_TOKEN }}
           lcov-file: "./test-results/coverage/lcov.info"
+          base-lcov-file: "./lcov.info"
           send-summary-comment: true
           show-annotations: "warning"
