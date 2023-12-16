@@ -38,6 +38,7 @@ jobs:
       - run: npm install
       - run: npm run test
       - name: Upload code coverage for master
+        if: always()
         uses: actions/upload-artifact@v3
         with:
           name: ref-lcov.info
