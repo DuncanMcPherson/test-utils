@@ -25,6 +25,7 @@ jobs:
             test-results/junit.xml
 
       - name: Generate code coverage
+        if: always()
         id: code-coverage
         uses: barecheck/code-coverage-action@v1
         with:
