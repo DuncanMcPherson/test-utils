@@ -361,6 +361,6 @@ describe("AutoMocker", () => {
 			const propertyData = autoMocker.testGetProperty(mock, 'updateProperty');
 
 			expect(propertyData).toBeTruthy();
-		})
-	})
-})
+		});
+	});
+});

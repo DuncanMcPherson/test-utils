@@ -248,5 +248,4 @@ export class AutoMockerPlus extends AutoMocker {
 		}
 		return this.throwNotASpyError(spyName);
 	}
-
 }
