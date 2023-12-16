@@ -1,10 +1,10 @@
-import { Observable, finalize } from "rxjs";
+import { Observable, finalize, Subscriber } from "rxjs";
 
 export class TestSubscriptionCounter<T> {
 	private _lifetimeSubscriptionCount: number = 0;
 	private _activeSubscriptionCount: number = 0;
 
-	public readonly countedObservable$ = new Observable<T>((observer) => {
+	public readonly countedObservable$ = new Observable<T>((observer: Subscriber<T>) => {
 		this._lifetimeSubscriptionCount++;
 		this._activeSubscriptionCount++
 

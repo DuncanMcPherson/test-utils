@@ -1,15 +1,15 @@
-import { Observable, skip as skipOperator, take, tap } from "rxjs";
+import { Observable, skip, take, tap } from "rxjs";
 
-export function readObservableSynchronously<T>(observable$: Observable<T>, skip = 0): T {
+export function readObservableSynchronously<T>(observable$: Observable<T>, skips = 0): T {
 	return readObservableSynchronouslyAfterAction(observable$, () => {
 		// Intentionally empty
-	}, skip);
+	}, skips);
 }
 
 export function readObservableSynchronouslyAfterAction<T>(
 	observable$: Observable<T>,
 	action: () => void,
-	skip = 0
+	skips = 0
 ): T {
 	if (!observable$) {
 		fail(`cannot subscribe to ${observable$}`)
@@ -25,7 +25,7 @@ export function readObservableSynchronouslyAfterAction<T>(
 	const subscription = observable$
 		.pipe(
 			tap(() => emissionCount++),
-			skipOperator(skip),
+			skip(skips),
 			take(1)
 		).subscribe({
 			next: (result) => {
@@ -48,7 +48,7 @@ export function readObservableSynchronouslyAfterAction<T>(
 
 export function readObservableErrorSynchronously(
 	observable$: Observable<any>,
-	skip = 0
+	skips = 0
 ): any {
 	if (!observable$) {
 		fail(`cannot subscribe to ${observable$}`);
@@ -61,7 +61,7 @@ export function readObservableErrorSynchronously(
 	const subscription = observable$
 		.pipe(
 			tap(() => emissionCount++),
-			skipOperator(skip),
+			skip(skips),
 			take(1),
 		)
 		.subscribe({
@@ -84,7 +84,7 @@ export function readObservableErrorSynchronously(
 
 export function readObservableCompletionSynchronously(
 	observable$: Observable<any>,
-	skip = 0,
+	skips = 0,
 ): boolean {
 	if (!observable$) {
 		fail(`cannot subscribe to ${observable$}`);
@@ -97,7 +97,7 @@ export function readObservableCompletionSynchronously(
 	const subscription = observable$
 		.pipe(
 			tap(() => emissionCount++),
-			skipOperator(skip),
+			skip(skips),
 			take(1),
 		)
 		.subscribe({
