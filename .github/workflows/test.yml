@@ -1,0 +1,25 @@
+name: Test Package
+
+on:
+  pull_request:
+
+jobs:
+  run-tests:
+    if: '${{ github.event.pull_request.head.repo.full_name == github.repository }}'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Cache node modules
+        id: cache-npm
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{runner.os }}-build-${{ hashFiles('**/package-lock.json') }}
+      - run: npm install
+      - run: npm run test
+      - name: Publish Test Results
+        uses: EnricoMi/piblish-unit-test-result-action@v2
+        if: always()
+        with:
+          files: |
+            test-results/**/*.xml
