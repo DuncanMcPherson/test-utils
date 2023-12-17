@@ -21,4 +21,20 @@ jobs:
           key: ${{ runner.os }}-build-${{ hashFiles('**/package-lock.json') }}
       - run: npm ci && npm run build
       - run: npm pack
-      - run: npm publish @ez-budgets/test-utils --access restricted
+      - run: npm publish
+  coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Cache node modules
+        id: cache-npm
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os}}-build-${{ hashFiles('**/package-lock.json') }}
+      - run: npm ci && npm run test
+      - name: Upload coverage to codecov
+        if: always()
+        uses: codecov/codecov-action@v3
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
