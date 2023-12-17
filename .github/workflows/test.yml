@@ -47,6 +47,7 @@ jobs:
         with:
           name: ref-lcov.info
           path: ./test-results/coverage/lcov.info
+#  TODO: evaluate the necessity/value of this bit
   checks:
     runs-on: ubuntu-latest
     needs: base_branch_coverage
