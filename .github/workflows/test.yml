@@ -31,6 +31,4 @@ jobs:
       - name: check npm login
         continue-on-error: true
         run: |
-          echo ${{ vars.NPM_TOKEN_TEST }}
-          npm adduser
           npm whoami
