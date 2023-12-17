@@ -23,6 +23,10 @@ jobs:
         with:
           files: |
             test-results/junit.xml
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
   base_branch_coverage:
     runs-on: ubuntu-latest
     steps:

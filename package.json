@@ -1,6 +1,6 @@
 {
   "name": "@ez-budgets/test-utils",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Packaging meant to help with the process of writing Jest tests",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
