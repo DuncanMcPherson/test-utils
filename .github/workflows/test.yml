@@ -34,4 +34,5 @@ jobs:
       - name: check npm login
         continue-on-error: true
         run: |
+          echo $${ env.NPM_TOKEN }}
           npm whoami
