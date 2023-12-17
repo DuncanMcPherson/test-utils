@@ -7,7 +7,7 @@ on:
 
 
 env:
-  NPM_TOKEN: ${{ secrets.NPM_DEPLOY }}
+  NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
 jobs:
   build_pack_and_publish:
@@ -21,6 +21,7 @@ jobs:
           path: ~/.npm
           key: ${{ runner.os }}-build-${{ hashFiles('**/package-lock.json') }}
       - run: npm ci && npm run build
+      - run: npm whoami
       - run: npm pack
       - run: npm publish
   coverage:

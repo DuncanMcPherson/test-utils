@@ -3,6 +3,9 @@ name: Test Package
 on:
   pull_request:
 
+env:
+  NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
 jobs:
   run-tests:
     if: '${{ github.event.pull_request.head.repo.full_name == github.repository }}'
