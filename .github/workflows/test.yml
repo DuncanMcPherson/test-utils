@@ -30,4 +30,6 @@ jobs:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
       - name: check npm login
         continue-on-error: true
-        run: npm whoami
+        run: |
+          echo ${{ vars.NPM_TOKEN_TEST }}
+          npm whoami
