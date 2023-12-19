@@ -1,6 +1,6 @@
 {
   "name": "@ez-budgets/test-utils",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Packaging meant to help with the process of writing Jest tests",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -39,7 +39,6 @@
     "@babel/preset-typescript": "^7.23.3",
     "@types/jest": "^29.5.11",
     "@types/lodash": "^4.14.202",
-    "jest-jasmine2": "^29.7.0",
     "jest-junit": "^16.0.0",
     "ts-node": "^10.9.2",
     "tsup": "^8.0.1",
