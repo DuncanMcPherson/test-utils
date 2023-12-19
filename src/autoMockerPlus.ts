@@ -62,11 +62,11 @@ export class AutoMockerPlus extends AutoMocker {
 
 	public withReturnObservables<T>(
 		spy: (...args: any[]) => Observable<T>,
-		resolveWith: T[],
+		resolveWith: T[] | Observable<T>[],
 		spyName?: string
 	): Observable<T>[] {
 		if (this.isSpyLike(spy)) {
-			const observables: Observable<T>[] = resolveWith.map((r) => {
+			const observables: Observable<T>[] = resolveWith.map((r: T | Observable<T>) => {
 				if (r instanceof Observable) {
 					return r;
 				}
@@ -84,7 +84,7 @@ export class AutoMockerPlus extends AutoMocker {
 		spyName?: string
 	): Observable<T> {
 		if (this.isSpyLike(spy)) {
-			const observable: Observable<T> = throwError(error);
+			const observable: Observable<T> = throwError(() => new Error(error));
 			spy.mockReturnValue(observable);
 			return observable;
 		}
