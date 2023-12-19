@@ -171,14 +171,10 @@ export class AutoMockerPlus extends AutoMocker {
 
 	public withReturnSubjectAsObservable<T>(
 		spy: (...args: any[]) => Observable<T>,
-		resolveWith?: T,
 		spyName?: string,
 	): Subject<T> {
 		if (this.isSpyLike(spy)) {
 			const subject: Subject<T> = new Subject<T>();
-			if (resolveWith !== undefined) {
-				subject.next(resolveWith);
-			}
 			const observable: Observable<T> = subject.asObservable();
 			spy.mockReturnValue(observable);
 			return subject;
