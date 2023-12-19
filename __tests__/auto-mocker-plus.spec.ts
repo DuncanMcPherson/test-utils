@@ -12,6 +12,10 @@ class TestMockClass {
 	}
 
 	public testProperty$ = of('I am a silly string');
+
+	public getPromise(): Promise<boolean> {
+		return Promise.resolve(true);
+	}
 }
 
 describe('AutoMockerPlus', () => {
@@ -215,7 +219,136 @@ describe('AutoMockerPlus', () => {
 			mock.testProperty$.subscribe((result) => {
 				expect(result).toEqual('my wife is cute');
 				done();
-			})
+			});
+		});
+	});
+
+	describe('withReturnSubjectWithCompletingCountedObservableForObservableProperty', () => {
+		test('should get counter and subject with no buffer when called and no value passed', () => {
+			const obj = autoMockerPlus.withReturnSubjectWithCompletingCountedObservableForObservableProperty(mock, 'testProperty$');
+			expect(obj.subject["_buffer"]).toEqual([]);
+			expect(obj.counter).toBeTruthy();
+		});
+
+		test("should get counter and subject with buffer when called and value passed", (done) => {
+			const obj = autoMockerPlus.withReturnSubjectWithCompletingCountedObservableForObservableProperty(mock, "testProperty$", "just a simple test string");
+			expect(obj.subject["_buffer"].length).toEqual(1);
+			expect(obj.counter).toBeTruthy();
+			mock.testProperty$.subscribe((result) => {
+				expect(result).toEqual('just a simple test string');
+				done();
+			});
+		});
+	});
+
+	describe('withReturnSubjectAsObservable', () => {
+		test('should throw error when method is not a spy', () => {
+			const fn = () => undefined;
+			expect(() => autoMockerPlus.withReturnSubjectAsObservable(fn)).toThrow();
+		});
+
+		test('should return observable and subject for updating values when called', (done) => {
+			const initial = false;
+			const subject = autoMockerPlus.withReturnSubjectAsObservable(mock.getObservable$);
+			let emissionNumber = 0;
+			mock.getObservable$().subscribe((result) => {
+				if (emissionNumber++ === 0) {
+					expect(result).toEqual(false)
+				} else {
+					expect(result).toEqual(true);
+					done();
+				}
+			});
+			subject.next(initial);
+			subject.next(true);
+		});
+	});
+
+	describe('withReturnReplaySubjectAsObservable', () => {
+		test('should throw error when method is not a spy', () => {
+			const fn = () => undefined;
+			expect(() => autoMockerPlus.withReturnReplaySubjectAsObservable(fn)).toThrow();
+		});
+
+		test('should return subject and observable when called', (done) => {
+			const subject = autoMockerPlus.withReturnReplaySubjectAsObservable(mock.getObservable$);
+			let emissions = 0;
+			mock.getObservable$().subscribe((result) => {
+				if (emissions++ === 0) {
+					expect(result).toEqual(false);
+				} else {
+					expect(result).toEqual(true);
+					done();
+				}
+			});
+			subject.next(false);
+			subject.next(true);
+		});
+
+		test('when called with initial value, result should be initial value', (done) => {
+			autoMockerPlus.withReturnReplaySubjectAsObservable(mock.getObservable$, true);
+			mock.getObservable$().subscribe((result) => {
+				expect(result).toEqual(true);
+				done();
+			});
+		});
+	});
+
+	describe("withReturnSubjectWithErrorAsObservable", () => {
+		test("should throw error when method is not a spy", () => {
+			expect(() => autoMockerPlus.withReturnSubjectWithErrorAsObservable(() => undefined)).toThrow();
+		});
+
+		test('observable should show error state when called with an error message', (done) => {
+			autoMockerPlus.withReturnSubjectWithErrorAsObservable(mock.getObservable$, "test error");
+			const result = mock.getObservable$();
+
+			result.subscribe({
+				next: (result) => {
+					fail(`should not have received result: ${result}`)
+				},
+				error: (err) => {
+					expect(err).toEqual('test error');
+					done();
+				}
+			});
+		});
+
+		test('observable should show error state with default error when called with no error message', (done) => {
+			autoMockerPlus.withReturnSubjectWithErrorAsObservable(mock.getObservable$);
+			const result = mock.getObservable$();
+
+			result.subscribe({
+				next: (result) => {
+					fail(`should not have received result: ${result}`);
+				},
+				error: (err) => {
+					expect(err.message).toEqual('error');
+					done();
+				}
+			});
+		});
+	});
+
+	describe('withReturnPromise', () => {
+		test('should throw error if method is not a spy', () => {
+			expect(() => autoMockerPlus.withReturnPromise(() => undefined)).toThrow();
+		});
+
+		test('should return a promise that resolves', () => {
+			autoMockerPlus.withReturnPromise(mock.getPromise, true);
+			expect(mock.getPromise()).resolves.toEqual(true);
+		});
+	});
+
+	describe('withReturnRejectedPromise', () => {
+		test('should throw error if method is not a spy', () => {
+			expect(() => autoMockerPlus.withReturnRejectedPromise(() => undefined)).toThrow();
+		});
+
+		test('should return a rejected promise', () => {
+			autoMockerPlus.withReturnRejectedPromise(mock.getPromise, "i got rejected");
+			expect(mock.getPromise()).rejects.toEqual("i got rejected");
 		})
 	})
 })

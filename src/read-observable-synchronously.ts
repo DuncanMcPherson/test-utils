@@ -39,7 +39,7 @@ export function readObservableSynchronouslyAfterAction<T>(
 	if (!emitted) {
 		subscription.unsubscribe();
 		fail(
-			`observable did not emit (skips requested: ${skip}, total skipped emmissions: ${emissionCount})`,
+			`observable did not emit (skips requested: ${skip}, total skipped emissions: ${emissionCount})`,
 		)
 	}
 
@@ -75,7 +75,7 @@ export function readObservableErrorSynchronously(
 	if (!emitted) {
 		subscription.unsubscribe();
 		fail(
-			`observable did not emit error (skips requested: ${skip}, total skipped emmissions: ${emissionCount})`,
+			`observable did not emit error (skips requested: ${skip}, total skipped emissions: ${emissionCount})`,
 		);
 	}
 
@@ -112,7 +112,7 @@ export function readObservableCompletionSynchronously(
 	if (!emitted) {
 		subscription.unsubscribe();
 		fail(
-			`observable did not emit complete (skips requested: ${skip}, total skipped emmissions: ${emissionCount})`,
+			`observable did not emit complete (skips requested: ${skip}, total skipped emissions: ${emissionCount})`,
 		);
 	}
 
