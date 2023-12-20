@@ -12,15 +12,16 @@ export function readObservableSynchronouslyAfterAction<T>(
 	skips = 0
 ): T {
 	if (!observable$) {
-		fail(`cannot subscribe to ${observable$}`)
+		throw new Error(`cannot subscribe to ${observable$}`)
 	}
 	if (!action) {
-		fail(`action (${action}) is required`)
+		throw new Error(`action (${action}) is required`)
 	}
 
 	let actualResult: T;
 	let emitted = false;
 	let emissionCount = 0;
+	let error: any;
 
 	const subscription = observable$
 		.pipe(
@@ -32,14 +33,18 @@ export function readObservableSynchronouslyAfterAction<T>(
 				actualResult = result;
 				emitted = true;
 			},
-			error: (err) => fail(err)
+			error: (err) => {error = err}
 		});
 	action();
 
+	if (error) {
+		throw new Error(error);
+	}
+
 	if (!emitted) {
 		subscription.unsubscribe();
-		fail(
-			`observable did not emit (skips requested: ${skip}, total skipped emissions: ${emissionCount})`,
+		throw new Error(
+			`observable did not emit (skips requested: ${skips}, total skipped emissions: ${emissionCount})`,
 		)
 	}
 
@@ -51,12 +56,13 @@ export function readObservableErrorSynchronously(
 	skips = 0
 ): any {
 	if (!observable$) {
-		fail(`cannot subscribe to ${observable$}`);
+		throw new Error(`cannot subscribe to ${observable$}`);
 	}
 
 	let actualError: any;
 	let emitted = false;
 	let emissionCount = 0;
+	let valueReceived: any;
 
 	const subscription = observable$
 		.pipe(
@@ -65,17 +71,21 @@ export function readObservableErrorSynchronously(
 			take(1),
 		)
 		.subscribe({
-			next: (val) => fail(val),
+			next: (val) => {valueReceived = val},
 			error: (error) => {
 				actualError = error;
 				emitted = true;
 			},
 		});
 
+	if (!!valueReceived) {
+		throw new Error(valueReceived)
+	}
+
 	if (!emitted) {
 		subscription.unsubscribe();
-		fail(
-			`observable did not emit error (skips requested: ${skip}, total skipped emissions: ${emissionCount})`,
+		throw new Error(
+			`observable did not emit error (skips requested: ${skips}, total skipped emissions: ${emissionCount})`,
 		);
 	}
 
@@ -87,12 +97,14 @@ export function readObservableCompletionSynchronously(
 	skips = 0,
 ): boolean {
 	if (!observable$) {
-		fail(`cannot subscribe to ${observable$}`);
+		throw new Error(`cannot subscribe to ${observable$}`);
 	}
 
 	let actualComplete: boolean;
 	let emitted = false;
 	let emissionCount = 0;
+	let error: any;
+	let value: any;
 
 	const subscription = observable$
 		.pipe(
@@ -101,18 +113,26 @@ export function readObservableCompletionSynchronously(
 			take(1),
 		)
 		.subscribe({
-			next: (val) => fail(val),
-			error: (error) => fail(error),
+			next: (val) => {value = val},
+			error: (err) => {error = err},
 			complete: () => {
 				actualComplete = true;
 				emitted = true;
 			},
 		});
 
+	if (!!value) {
+		throw new Error(value);
+	}
+
+	if (!!error) {
+		throw new Error(error);
+	}
+
 	if (!emitted) {
 		subscription.unsubscribe();
-		fail(
-			`observable did not emit complete (skips requested: ${skip}, total skipped emissions: ${emissionCount})`,
+		throw new Error(
+			`observable did not emit complete (skips requested: ${skips}, total skipped emissions: ${emissionCount})`,
 		);
 	}
 

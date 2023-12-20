@@ -33,7 +33,7 @@ describe('AutoMockerPlus', () => {
 
 			try {
 				const result = autoMockerPlus.withReturnObservable(spy);
-				fail(`should have thrown error but got: ${result}`)
+				throw new Error(`should have thrown error but got: ${result}`)
 			} catch (e) {
 				expect(e).toBeTruthy();
 				expect(e.message).toBeTruthy();
@@ -305,7 +305,7 @@ describe('AutoMockerPlus', () => {
 
 			result.subscribe({
 				next: (result) => {
-					fail(`should not have received result: ${result}`)
+					throw new Error(`should not have received result: ${result}`)
 				},
 				error: (err) => {
 					expect(err).toEqual('test error');
@@ -320,7 +320,7 @@ describe('AutoMockerPlus', () => {
 
 			result.subscribe({
 				next: (result) => {
-					fail(`should not have received result: ${result}`);
+					throw new Error(`should not have received result: ${result}`);
 				},
 				error: (err) => {
 					expect(err.message).toEqual('error');
@@ -349,6 +349,6 @@ describe('AutoMockerPlus', () => {
 		test('should return a rejected promise', () => {
 			autoMockerPlus.withReturnRejectedPromise(mock.getPromise, "i got rejected");
 			expect(mock.getPromise()).rejects.toEqual("i got rejected");
-		})
-	})
-})
+		});
+	});
+});
