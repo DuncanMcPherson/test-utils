@@ -8,10 +8,10 @@ module.exports = {
   coverageDirectory: './test-results/coverage',
   coverageThreshold: {
     global: {
-      branches: 90,
-      functions: 93,
-      lines: 92,
-      statements: 92
+      branches: 95,
+      functions: 100,
+      lines: 100,
+      statements: 100
     }
   },
   reporters: ['default', 'jest-junit']

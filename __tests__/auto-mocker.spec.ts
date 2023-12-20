@@ -1,5 +1,7 @@
-import { AutoMocker } from "../src/autoMocker";
+// noinspection ExceptionCaughtLocallyJS
 
+import { AutoMocker } from "../src/autoMocker";
+// TODO: Cover remaining branches
 class TestMockClass {
 	public newProperty: number = 85;
 	public oldProperty: number = 12;
@@ -59,9 +61,10 @@ describe("AutoMocker", () => {
 
 			try {
 				autoMocker.withCallFake(spy, () => 1);
-				fail('should throw error')
+				throw new Error('should throw error')
 			} catch (e) {
 				expect(e).toBeTruthy();
+				expect(e.message.includes("not an actual spy")).toEqual(true)
 			}
 		})
 	});
@@ -83,9 +86,10 @@ describe("AutoMocker", () => {
 
 			try {
 				autoMocker.withFirstArgMappedReturn(spy, () => 1);
-				fail('should throw error')
+				throw new Error('should throw error')
 			} catch (e) {
 				expect(e).toBeTruthy();
+				expect(e.message.includes("not an actual spy")).toEqual(true);
 			}
 		})
 	});
@@ -106,9 +110,10 @@ describe("AutoMocker", () => {
 
 			try {
 				autoMocker.withReturnValue(spy, () => 1);
-				fail('should throw error')
+				throw new Error('should throw error')
 			} catch (e) {
 				expect(e).toBeTruthy();
+				expect(e.message.includes("not an actual spy")).toEqual(true);
 			}
 		})
 	});
@@ -151,9 +156,10 @@ describe("AutoMocker", () => {
 
 			try {
 				autoMocker.withReturnValues(spy, []);
-				fail('should throw error')
+				throw new Error('should throw error')
 			} catch (e) {
 				expect(e).toBeTruthy();
+				expect(e.message.includes("not an actual spy")).toEqual(true);
 			}
 		})
 	});
@@ -175,7 +181,7 @@ describe("AutoMocker", () => {
 
 				try {
 					mock.updateProperty(Math.floor(Math.random() * 10));
-					fail('Should have thrown error')
+					throw new Error('Should have thrown error')
 				} catch (e) {
 					expect(e.message).toEqual(testCase.expected);
 				}
@@ -187,9 +193,10 @@ describe("AutoMocker", () => {
 
 			try {
 				autoMocker.withThrows(spy);
-				fail('should throw error')
+				throw new Error('should throw error')
 			} catch (e) {
 				expect(e).toBeTruthy();
+				expect(e.message.includes("not an actual spy")).toEqual(true);
 			}
 		});
 	});
@@ -200,9 +207,10 @@ describe("AutoMocker", () => {
 
 			try {
 				autoMocker.resetSpy(spy);
-				fail('should throw error')
+				throw new Error('should throw error')
 			} catch (e) {
 				expect(e).toBeTruthy();
+				expect(e.message.includes("not an actual spy")).toEqual(true);
 			}
 		})
 
@@ -276,7 +284,7 @@ describe("AutoMocker", () => {
 
 			try {
 				const value = mock.NewProp;
-				fail(`Should not have gotten value: ${value}`);
+				throw new Error(`Should not have gotten value: ${value}`);
 			} catch(e) {
 				expect(e.message).toEqual('Test error');
 			}
@@ -318,9 +326,10 @@ describe("AutoMocker", () => {
 
 			try {
 				const result = autoMocker.getCallArgs(fn);
-				fail(`Should not have succeeded: ${result}`);
+				throw new Error(`Should not have succeeded: ${result}`);
 			} catch (e) {
 				expect(e).toBeTruthy();
+				expect(e.message.includes("not an actual spy")).toEqual(true);
 			}
 		});
 	});
@@ -342,9 +351,10 @@ describe("AutoMocker", () => {
 			const fn = () => undefined;
 			try {
 				autoMocker.getCallCount(fn);
-				fail('should have thrown an error')
+				throw new Error('should have thrown an error')
 			} catch (e) {
 				expect(e).toBeTruthy();
+				expect(e.message.includes("not an actual spy")).toEqual(true);
 			}
 		});
 	});
